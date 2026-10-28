@@ -66,7 +66,7 @@ footer small{display:block;margin-top:.8rem;font-size:.78rem;opacity:.85}
 <header class="hero">
 <p class="in">in</p>
 <h1 class="title ext">CineMatch</h1>
-<p class="sub">Tell us what you love and what you can’t sit through. We’ll pick tonight’s feature.</p>
+<p class="sub">Tell us what you love and the mood you’re in. We’ll pick tonight’s feature.</p>
 <p class="credit">Presented by Sevanth</p>
 </header>
 
@@ -81,12 +81,6 @@ footer small{display:block;margin-top:.8rem;font-size:.78rem;opacity:.85}
 <fieldset>
 <legend>Themes you’re in the mood for</legend>
 <div class="chips" id="themes" style="margin-top:0"></div>
-</fieldset>
-<fieldset>
-<legend>Films you disliked</legend>
-<p class="hint">We’ll steer away from anything similar.</p>
-<div class="row"><input id="dis" list="titles" placeholder="Start typing a title" aria-label="Disliked film"><button class="btn" id="addDis" type="button">Add film</button></div>
-<ul class="chips" id="disChips"></ul>
 </fieldset>
 <fieldset>
 <label class="l" for="genre">Genre</label>
@@ -156,7 +150,7 @@ var R=[
 var $=function(i){return document.getElementById(i)};
 var movies=R.map(function(r){return{t:r[0],y:r[1],g:r[2].split("|"),k:r[3].split("|"),d:r[4]}});
 var by={};movies.forEach(function(m){by[m.t]=m});
-var fav=[],dis=[],themes=[];
+var fav=[],themes=[];
 var allThemes=[...new Set(movies.flatMap(function(m){return m.k}))].sort();
 var allGenres=[...new Set(movies.flatMap(function(m){return m.g}))].sort();
 
@@ -167,16 +161,14 @@ $("themes").addEventListener("click",function(e){var b=e.target.closest(".theme"
 
 function say(t){$("msg").textContent=t}
 function draw(box,arr){var el=$(box);el.innerHTML="";arr.forEach(function(t){var li=document.createElement("li"),b=document.createElement("button");b.type="button";b.className="chip";b.textContent=t;b.setAttribute("aria-label","Remove "+t);b.onclick=function(){arr.splice(arr.indexOf(t),1);draw(box,arr)};li.appendChild(b);el.appendChild(li)})}
-function addTo(inp,box,arr,other,otherBox,max){
+function addTo(inp,box,arr,max){
   var v=$(inp).value.trim().toLowerCase(),m=movies.find(function(x){return x.t.toLowerCase()===v});
   if(!m){say("Pick a title from the suggestions. This sample catalogue has 40 films.");return}
   if(arr.indexOf(m.t)>-1){say(m.t+" is already added.");return}
   if(arr.length>=max){say("You can add up to "+max+" films here.");return}
-  var j=other.indexOf(m.t);if(j>-1){other.splice(j,1);draw(otherBox,other)}
   arr.push(m.t);$(inp).value="";say("");draw(box,arr)}
-$("addFav").onclick=function(){addTo("fav","favChips",fav,dis,"disChips",3)};
-$("addDis").onclick=function(){addTo("dis","disChips",dis,fav,"favChips",6)};
-["fav","dis"].forEach(function(id){$(id).addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();$(id==="fav"?"addFav":"addDis").click()}})});
+$("addFav").onclick=function(){addTo("fav","favChips",fav,3)};
+$("fav").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();$("addFav").click()}});
 
 function vec(m){var v={};m.g.forEach(function(x){v["g:"+x]=1});m.k.forEach(function(x){v["k:"+x]=1.6});v["d:"+m.d]=.9;return v}
 function add(a,b,w){for(var k in b){a[k]=(a[k]||0)+b[k]*w}}
@@ -184,22 +176,20 @@ function cos(a,b){var d=0,x=0,y=0,k;for(k in a){x+=a[k]*a[k];if(b[k])d+=a[k]*b[k
 
 $("go").onclick=function(){
   if(!fav.length&&!themes.length){say("Add a favourite film or pick a theme to get started.");return}
-  var genre=$("genre").value,liked={},bad={};
+  var genre=$("genre").value,liked={};
   fav.forEach(function(t){add(liked,vec(by[t]),1)});
   themes.forEach(function(k){liked["k:"+k]=(liked["k:"+k]||0)+2.2});
-  dis.forEach(function(t){add(bad,vec(by[t]),1)});
-  var res=movies.filter(function(m){return fav.indexOf(m.t)<0&&dis.indexOf(m.t)<0&&(!genre||m.g.indexOf(genre)>-1)}).map(function(m){
-    var v=vec(m),s=cos(v,liked)-(dis.length?.6*cos(v,bad):0),why=[];
+  var res=movies.filter(function(m){return fav.indexOf(m.t)<0&&(!genre||m.g.indexOf(genre)>-1)}).map(function(m){
+    var v=vec(m),s=cos(v,liked),why=[];
     var th=m.k.filter(function(k){return themes.indexOf(k)>-1});
     if(th.length)why.push("matches your theme"+(th.length>1?"s":"")+": "+th.join(", "));
     var best=null,bs=0;fav.forEach(function(t){var f=by[t];if(f.d===m.d){why.push("same director as "+t)}var sh=f.k.filter(function(k){return m.k.indexOf(k)>-1}).length;if(sh>bs){bs=sh;best=t}});
     if(best)why.push("shares themes with "+best);
-    if(dis.length&&cos(v,bad)<.15)why.push("far from what you disliked");
     return{m:m,s:s,why:why}}).filter(function(r){return r.s>0}).sort(function(a,b){return b.s-a.s}).slice(0,6);
-  if(!res.length){say("No matches for that mix. Try another genre or fewer dislikes.");$("out").hidden=true;return}
+  if(!res.length){say("No matches for that mix. Try another theme or genre.");$("out").hidden=true;return}
   say("");var top=res[0].s;
   $("grid").innerHTML=res.map(function(r,i){var m=r.m;return'<article class="pick" style="animation-delay:'+i*90+'ms"><h3 class="ext">'+m.t+"</h3><p>"+m.y+", "+m.g.join(", ")+"</p><p>Directed by "+m.d+'</p><p class="why">Why it’s here: '+(r.why.join("; ")||"close to your taste profile")+'.</p><div class="bar" role="img" aria-label="Match strength"><i style="width:'+Math.max(12,Math.round(r.s/top*100))+'%"></i></div></article>'}).join("");
-  $("out").hidden=false;$("out").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"})};
+  $("out").hidden=false;$("out").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"} )};
 
 function setTheme(t){document.documentElement.dataset.theme=t;$("theme").textContent=t==="noir"?"Switch to Technicolor":"Switch to Noir";try{localStorage.setItem("cm-theme",t)}catch(e){}}
 $("theme").onclick=function(){setTheme(document.documentElement.dataset.theme==="noir"?"technicolor":"noir")};
