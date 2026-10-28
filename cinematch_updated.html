@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en" data-theme="technicolor">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CineMatch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Libre+Baskerville:ital@0;1&family=Oswald:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+:root[data-theme="technicolor"]{--bg:#6e6874;--bg2:#2b2830;--gold:#e9b824;--hi:#f6d55c;--sh:#1f3b1c;--cream:#f3e9d2;--panel:rgba(27,24,32,.78)}
+:root[data-theme="noir"]{--bg:#17161c;--bg2:#050507;--gold:#c9a24a;--hi:#e3c77a;--sh:#2a1f08;--cream:#ece7de;--panel:rgba(12,11,15,.82)}
+html{background:var(--bg2)}
+body{margin:0;min-height:100vh;color:var(--cream);font:400 1rem/1.65 "Libre Baskerville",Georgia,serif;background:radial-gradient(ellipse at 50% 18%,var(--bg) 0%,var(--bg2) 85%)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.09;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+main,footer{max-width:60rem;margin:0 auto;padding:0 1.25rem}
+.ext{font-family:"Abril Fatface","Playfair Display",Georgia,serif;font-weight:400;color:var(--gold);line-height:1;text-shadow:.012em .012em 0 var(--sh),.024em .024em 0 var(--sh),.036em .036em 0 var(--sh),.048em .048em 0 var(--sh),.06em .06em 0 var(--sh),.072em .072em 0 var(--sh),.09em .12em .14em rgba(0,0,0,.5)}
+.credit{font:500 .72rem/1.5 Oswald,"Arial Narrow",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.top{display:flex;justify-content:flex-end;padding:1rem 1.25rem 0;max-width:60rem;margin:0 auto}
+button,select,input{font:inherit;color:inherit}
+.btn{cursor:pointer;border:2px solid var(--gold);background:transparent;color:var(--gold);padding:.45rem .9rem;border-radius:2px;font:500 .8rem Oswald,sans-serif;letter-spacing:.08em}
+.btn:hover{background:var(--gold);color:var(--bg2)}
+:focus-visible{outline:3px solid var(--hi);outline-offset:2px}
+.hero{text-align:center;padding:3.5rem 0 2.5rem}
+.hero .in{margin:0 0 .6rem;font:italic 1.2rem Georgia,serif;color:var(--gold)}
+.title{margin:0;font-size:clamp(3.4rem,16vw,8.5rem);animation:roll 2.4s cubic-bezier(.2,.7,.2,1) both}
+@keyframes roll{from{opacity:0;transform:scale(1.35);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
+.hero .sub{max-width:34rem;margin:1.6rem auto 1.2rem;font-style:italic;font-size:1.1rem;color:var(--cream)}
+.card,.pick{background:var(--panel);border:4px double var(--gold);padding:1.5rem}
+.card h2{margin:0 0 1.2rem;font-size:2rem}
+fieldset{border:0;margin:0 0 1.4rem;padding:0}
+legend,label.l{display:block;margin-bottom:.4rem;font-weight:700;color:var(--hi)}
+.hint{margin:0 0 .5rem;font-size:.85rem;opacity:.85}
+.row{display:flex;gap:.5rem;flex-wrap:wrap}
+input,select{flex:1 1 14rem;min-width:0;padding:.55rem .7rem;background:rgba(243,233,210,.1);border:1px solid var(--gold);border-radius:2px}
+select option{color:#1b1a1f}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.6rem;padding:0;list-style:none}
+.chip,.theme{border:1px solid var(--gold);border-radius:99px;padding:.2rem .8rem;font-size:.85rem;background:transparent;color:var(--cream);cursor:pointer}
+.chip::after{content:" \00d7";color:var(--gold)}
+.theme[aria-pressed="true"]{background:var(--gold);color:#1b1a1f;font-weight:700}
+.go{width:100%;padding:.8rem;font-size:1.05rem;background:var(--gold);color:#1b1a1f}
+.go:hover{background:var(--hi);color:#1b1a1f}
+#msg{min-height:1.5rem;margin:.8rem 0 0;color:var(--hi)}
+#out{margin:3rem 0}
+#out>h2{text-align:center;font-size:clamp(2rem,7vw,3.2rem);margin:0 0 1.6rem}
+.grid{display:grid;gap:1.2rem;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr))}
+.pick{animation:in .5s both}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.pick h3{margin:0 0 .5rem;font-size:1.9rem}
+.pick p{margin:.2rem 0}
+.why{margin-top:.7rem!important;font-size:.88rem;border-top:1px solid var(--gold);padding-top:.6rem}
+.bar{height:6px;background:rgba(243,233,210,.2);margin-top:.8rem}
+.bar i{display:block;height:100%;background:var(--gold)}
+footer{text-align:center;padding:2rem 1.25rem 3rem}
+footer .credit{margin:.3rem 0}
+footer small{display:block;margin-top:.8rem;font-size:.78rem;opacity:.85}
+@media (prefers-reduced-motion:reduce){.title,.pick{animation:none}}
+</style>
+</head>
+<body>
+<div class="top"><button class="btn" id="theme" type="button">Switch to Noir</button></div>
+<main>
+<header class="hero">
+<p class="in">in</p>
+<h1 class="title ext">CineMatch</h1>
+<p class="sub">Tell us what you love and the mood you’re in. We’ll pick tonight’s feature.</p>
+<p class="credit">Presented by Sevanth</p>
+</header>
+
+<section class="card" aria-labelledby="ft">
+<h2 class="ext" id="ft">Your taste</h2>
+<fieldset>
+<legend>Favourite films</legend>
+<p class="hint">Add up to three from the catalogue.</p>
+<div class="row"><input id="fav" list="titles" placeholder="Start typing a title" aria-label="Favourite film"><button class="btn" id="addFav" type="button">Add film</button></div>
+<ul class="chips" id="favChips"></ul>
+</fieldset>
+<fieldset>
+<legend>Themes you’re in the mood for</legend>
+<div class="chips" id="themes" style="margin-top:0"></div>
+</fieldset>
+<fieldset>
+<label class="l" for="genre">Genre</label>
+<div class="row"><select id="genre"></select></div>
+</fieldset>
+<button class="btn go" id="go" type="button">Find my films</button>
+<p id="msg" role="status" aria-live="polite"></p>
+</section>
+
+<section id="out" hidden aria-live="polite">
+<h2 class="ext">Tonight’s feature presentation</h2>
+<div class="grid" id="grid"></div>
+</section>
+</main>
+
+<footer>
+<p class="credit">Produced by Sevanth</p>
+<p class="credit">© 2026 Sevanth. All rights reserved.</p>
+<small>This build uses a sample catalogue of 40 films. Live movie data comes in the next version.</small>
+</footer>
+<datalist id="titles"></datalist>
+
+<script>
+var R=[
+["Inception",2010,"Sci-Fi|Thriller","heist|dreams|mind-bending","Christopher Nolan"],
+["Interstellar",2014,"Sci-Fi|Drama","space|time|family","Christopher Nolan"],
+["The Prestige",2006,"Mystery|Drama","rivalry|mystery|obsession","Christopher Nolan"],
+["Memento",2000,"Mystery|Thriller","memory|revenge|mind-bending","Christopher Nolan"],
+["The Dark Knight",2008,"Action|Crime","crime|justice|chaos","Christopher Nolan"],
+["Heat",1995,"Crime|Thriller","heist|crime|rivalry","Michael Mann"],
+["Ocean’s Eleven",2001,"Crime|Comedy","heist|friendship|caper","Steven Soderbergh"],
+["The Italian Job",2003,"Crime|Action","heist|revenge|caper","F. Gary Gray"],
+["Baby Driver",2017,"Action|Crime","heist|music|romance","Edgar Wright"],
+["Back to the Future",1985,"Sci-Fi|Comedy","time|family|coming of age","Robert Zemeckis"],
+["Arrival",2016,"Sci-Fi|Drama","time|language|mind-bending","Denis Villeneuve"],
+["Groundhog Day",1993,"Comedy|Romance","time|romance|redemption","Harold Ramis"],
+["Edge of Tomorrow",2014,"Sci-Fi|Action","time|survival|war","Doug Liman"],
+["Palm Springs",2020,"Comedy|Romance","time|romance|redemption","Max Barbakow"],
+["Lady Bird",2017,"Drama|Comedy","coming of age|family|friendship","Greta Gerwig"],
+["Boyhood",2014,"Drama","coming of age|family|time","Richard Linklater"],
+["The Perks of Being a Wallflower",2012,"Drama|Romance","coming of age|friendship|music","Stephen Chbosky"],
+["Whiplash",2014,"Drama|Music","music|obsession|rivalry","Damien Chazelle"],
+["La La Land",2016,"Romance|Music","music|romance|dreams","Damien Chazelle"],
+["Singin’ in the Rain",1952,"Musical|Comedy","music|romance|hollywood","Stanley Donen"],
+["Casablanca",1942,"Romance|Drama","romance|war|sacrifice","Michael Curtiz"],
+["Sunset Boulevard",1950,"Drama|Noir","hollywood|obsession|crime","Billy Wilder"],
+["Some Like It Hot",1959,"Comedy|Romance","caper|friendship|hollywood","Billy Wilder"],
+["Parasite",2019,"Thriller|Drama","class|crime|family","Bong Joon-ho"],
+["Se7en",1995,"Crime|Thriller","crime|mystery|obsession","David Fincher"],
+["Gone Girl",2014,"Mystery|Thriller","mystery|revenge|marriage","David Fincher"],
+["Spirited Away",2001,"Animation|Fantasy","coming of age|folklore|family","Hayao Miyazaki"],
+["Spider-Man: Into the Spider-Verse",2018,"Animation|Action","coming of age|family|friendship","Bob Persichetti"],
+["The Grand Budapest Hotel",2014,"Comedy|Crime","caper|friendship|mystery","Wes Anderson"],
+["Knives Out",2019,"Mystery|Comedy","mystery|family|class","Rian Johnson"],
+["Mad Max: Fury Road",2015,"Action|Sci-Fi","survival|chaos|revenge","George Miller"],
+["The Matrix",1999,"Sci-Fi|Action","mind-bending|rebellion|survival","The Wachowskis"],
+["Blade Runner 2049",2017,"Sci-Fi|Drama","mind-bending|memory|space","Denis Villeneuve"],
+["Her",2013,"Romance|Sci-Fi","romance|memory|loneliness","Spike Jonze"],
+["Eternal Sunshine of the Spotless Mind",2004,"Romance|Drama","memory|romance|mind-bending","Michel Gondry"],
+["Coco",2017,"Animation|Family","music|family|folklore","Lee Unkrich"],
+["Drishyam",2013,"Thriller|Drama","family|crime|mystery","Jeethu Joseph"],
+["Lagaan",2001,"Drama|Sport","underdog|rebellion|friendship","Ashutosh Gowariker"],
+["3 Idiots",2009,"Comedy|Drama","coming of age|friendship|class","Rajkumar Hirani"],
+["Kantara",2022,"Thriller|Fantasy","folklore|revenge|class","Rishab Shetty"],
+["Baahubali: The Beginning",2015,"Action|Fantasy","revenge|rebellion|family","S. S. Rajamouli"]
+];
+var $=function(i){return document.getElementById(i)};
+var movies=R.map(function(r){return{t:r[0],y:r[1],g:r[2].split("|"),k:r[3].split("|"),d:r[4]}});
+var by={};movies.forEach(function(m){by[m.t]=m});
+var fav=[],themes=[];
+var allThemes=[...new Set(movies.flatMap(function(m){return m.k}))].sort();
+var allGenres=[...new Set(movies.flatMap(function(m){return m.g}))].sort();
+
+$("titles").innerHTML=movies.map(function(m){return'<option value="'+m.t.replace(/"/g,"&quot;")+'">'}).join("");
+$("genre").innerHTML='<option value="">Any genre</option>'+allGenres.map(function(g){return"<option>"+g+"</option>"}).join("");
+$("themes").innerHTML=allThemes.map(function(k){return'<button type="button" class="theme" aria-pressed="false" data-k="'+k+'">'+k+"</button>"}).join("");
+$("themes").addEventListener("click",function(e){var b=e.target.closest(".theme");if(!b)return;var k=b.dataset.k,i=themes.indexOf(k);if(i<0){themes.push(k)}else{themes.splice(i,1)}b.setAttribute("aria-pressed",i<0)});
+
+function say(t){$("msg").textContent=t}
+function draw(box,arr){var el=$(box);el.innerHTML="";arr.forEach(function(t){var li=document.createElement("li"),b=document.createElement("button");b.type="button";b.className="chip";b.textContent=t;b.setAttribute("aria-label","Remove "+t);b.onclick=function(){arr.splice(arr.indexOf(t),1);draw(box,arr)};li.appendChild(b);el.appendChild(li)})}
+function addTo(inp,box,arr,max){
+  var v=$(inp).value.trim().toLowerCase(),m=movies.find(function(x){return x.t.toLowerCase()===v});
+  if(!m){say("Pick a title from the suggestions. This sample catalogue has 40 films.");return}
+  if(arr.indexOf(m.t)>-1){say(m.t+" is already added.");return}
+  if(arr.length>=max){say("You can add up to "+max+" films here.");return}
+  arr.push(m.t);$(inp).value="";say("");draw(box,arr)}
+$("addFav").onclick=function(){addTo("fav","favChips",fav,3)};
+$("fav").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();$("addFav").click()}});
+
+function vec(m){var v={};m.g.forEach(function(x){v["g:"+x]=1});m.k.forEach(function(x){v["k:"+x]=1.6});v["d:"+m.d]=.9;return v}
+function add(a,b,w){for(var k in b){a[k]=(a[k]||0)+b[k]*w}}
+function cos(a,b){var d=0,x=0,y=0,k;for(k in a){x+=a[k]*a[k];if(b[k])d+=a[k]*b[k]}for(k in b)y+=b[k]*b[k];return x&&y?d/Math.sqrt(x*y):0}
+
+$("go").onclick=function(){
+  if(!fav.length&&!themes.length){say("Add a favourite film or pick a theme to get started.");return}
+  var genre=$("genre").value,liked={};
+  fav.forEach(function(t){add(liked,vec(by[t]),1)});
+  themes.forEach(function(k){liked["k:"+k]=(liked["k:"+k]||0)+2.2});
+  var res=movies.filter(function(m){return fav.indexOf(m.t)<0&&(!genre||m.g.indexOf(genre)>-1)}).map(function(m){
+    var v=vec(m),s=cos(v,liked),why=[];
+    var th=m.k.filter(function(k){return themes.indexOf(k)>-1});
+    if(th.length)why.push("matches your theme"+(th.length>1?"s":"")+": "+th.join(", "));
+    var best=null,bs=0;fav.forEach(function(t){var f=by[t];if(f.d===m.d){why.push("same director as "+t)}var sh=f.k.filter(function(k){return m.k.indexOf(k)>-1}).length;if(sh>bs){bs=sh;best=t}});
+    if(best)why.push("shares themes with "+best);
+    return{m:m,s:s,why:why}}).filter(function(r){return r.s>0}).sort(function(a,b){return b.s-a.s}).slice(0,6);
+  if(!res.length){say("No matches for that mix. Try another theme or genre.");$("out").hidden=true;return}
+  say("");var top=res[0].s;
+  $("grid").innerHTML=res.map(function(r,i){var m=r.m;return'<article class="pick" style="animation-delay:'+i*90+'ms"><h3 class="ext">'+m.t+"</h3><p>"+m.y+", "+m.g.join(", ")+"</p><p>Directed by "+m.d+'</p><p class="why">Why it’s here: '+(r.why.join("; ")||"close to your taste profile")+'.</p><div class="bar" role="img" aria-label="Match strength"><i style="width:'+Math.max(12,Math.round(r.s/top*100))+'%"></i></div></article>'}).join("");
+  $("out").hidden=false;$("out").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"} )};
+
+function setTheme(t){document.documentElement.dataset.theme=t;$("theme").textContent=t==="noir"?"Switch to Technicolor":"Switch to Noir";try{localStorage.setItem("cm-theme",t)}catch(e){}}
+$("theme").onclick=function(){setTheme(document.documentElement.dataset.theme==="noir"?"technicolor":"noir")};
+try{var s=localStorage.getItem("cm-theme");if(s==="noir"||s==="technicolor")setTheme(s)}catch(e){}
+</script>
+</body>
+</html>
