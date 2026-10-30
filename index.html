@@ -19,7 +19,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.09;mi
 main,footer{max-width:60rem;margin:0 auto;padding:0 1.25rem}
 .ext{font-family:"Abril Fatface","Playfair Display",Georgia,serif;font-weight:400;color:var(--gold);line-height:1;text-shadow:.012em .012em 0 var(--sh),.024em .024em 0 var(--sh),.036em .036em 0 var(--sh),.048em .048em 0 var(--sh),.06em .06em 0 var(--sh),.072em .072em 0 var(--sh),.09em .12em .14em rgba(0,0,0,.5)}
 .credit{font:500 .72rem/1.5 Oswald,"Arial Narrow",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
-.top{display:flex;justify-content:flex-end;padding:1rem 1.25rem 0;max-width:60rem;margin:0 auto}
+.top{display:flex;justify-content:flex-end;align-items:center;gap:.6rem;flex-wrap:wrap;padding:1rem 1.25rem 0;max-width:60rem;margin:0 auto}
 button,select,input{font:inherit;color:inherit}
 .btn{cursor:pointer;border:2px solid var(--gold);background:transparent;color:var(--gold);padding:.45rem .9rem;border-radius:2px;font:500 .8rem Oswald,sans-serif;letter-spacing:.08em}
 .btn:hover{background:var(--gold);color:var(--bg2)}
@@ -57,20 +57,85 @@ select option{color:#1b1a1f}
 footer{text-align:center;padding:2rem 1.25rem 3rem}
 footer .credit{margin:.3rem 0}
 footer small{display:block;margin-top:.8rem;font-size:.78rem;opacity:.85}
+.who{max-width:14rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:500 .78rem Oswald,sans-serif;letter-spacing:.06em;color:var(--hi)}
+.btn:disabled,.go:disabled{opacity:.55;cursor:default}
+.authdlg{width:min(26rem,calc(100% - 2rem));max-height:calc(100% - 2rem);overflow:auto;padding:0;background:var(--bg2);color:var(--cream);border:4px double var(--gold)}
+.authdlg::backdrop{background:rgba(0,0,0,.72)}
+.authdlg .in2{position:relative;padding:1.5rem}
+.authdlg h2{margin:0 2rem 1rem 0;font-size:2rem}
+.authdlg .x{position:absolute;top:.6rem;right:.6rem;padding:.1rem .6rem;font-size:1.2rem;line-height:1.4}
+.authdlg input{display:block;width:100%;flex:none;margin-bottom:1rem}
+.authdlg input[aria-invalid="true"]{border-color:#ff8a76}
+.tabs{margin:0 0 1rem}
+.or{margin:1rem 0;text-align:center;font-size:.85rem;opacity:.8}
+.links{display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin:1rem 0 0}
+.link{background:none;border:0;padding:0;color:var(--hi);text-decoration:underline;cursor:pointer;font:inherit;font-size:.88rem}
+.link:disabled{opacity:.5;cursor:default}
+#aMsg{min-height:1.4rem;margin:.8rem 0 0;font-size:.9rem;color:var(--hi)}
+#aMsg.err{color:#ffb4a6}
+.authdlg.off .authbody{display:none}
+.authdlg:not(.off) #authOff{display:none}
+.toast{position:fixed;left:50%;bottom:calc(1.25rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:calc(100% - 2.5rem);z-index:20;background:var(--gold);color:#1b1a1f;padding:.6rem 1rem;border-radius:2px;font:500 .85rem/1.4 Oswald,sans-serif;letter-spacing:.06em}
+/* ---- cinematic layer (overrides; theme variables unchanged) ---- */
+body{overflow-x:clip}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;max-width:none;margin:0;padding:.7rem max(1.25rem,calc((100% - 60rem)/2));background:linear-gradient(var(--bg2),rgba(5,5,7,.55));backdrop-filter:blur(10px);border-bottom:1px solid rgba(233,184,36,.25)}
+.top .sp{flex:1}.brand{font-size:1.5rem;text-decoration:none}
+.hero{position:relative;isolation:isolate;overflow:hidden;margin:0 calc(50% - 50vw);padding:clamp(4rem,14vh,8rem) 1.25rem clamp(3rem,9vh,5rem);min-height:min(80vh,40rem);display:flex;flex-direction:column;justify-content:center}
+.bgv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.7}
+.shade{position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 40%,rgba(5,5,7,.15),var(--bg2) 92%),linear-gradient(transparent 60%,var(--bg2))}
+.hero .sub{font-size:clamp(1rem,2.6vw,1.2rem)}
+.row input,.row .btn,select{border-radius:99px}.row input,select{padding:.65rem 1.1rem}
+.row .btn{padding:.5rem 1.2rem}.go{border-radius:99px}
+.card{border-radius:6px;backdrop-filter:blur(6px)}
+.pick{border-width:3px;border-radius:6px;overflow-wrap:anywhere;transition:transform .2s,box-shadow .2s}
+.pick:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.pick h3{font-size:clamp(1.4rem,4vw,1.9rem)}
+.theme{padding:.3rem .9rem;transition:background .15s}.theme:hover{background:rgba(233,184,36,.18)}
+.theme[aria-pressed="true"]:hover{background:var(--gold)}
+@media (max-width:34rem){.brand{font-size:1.25rem}.who{order:5;flex-basis:100%;max-width:none}.top{padding-top:.5rem}.card{padding:1.1rem}.grid{grid-template-columns:1fr}.authdlg .in2{padding:1.1rem}}
+.blk{margin:3rem 0}.blk>h2{font-size:clamp(1.8rem,6vw,2.6rem);margin:0 0 1rem}
+.mgrid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(10.5rem,1fr))}
+.mc{background:var(--panel);border:2px solid var(--gold);border-radius:6px;display:flex;flex-direction:column;overflow:hidden}
+.mc .ph{display:flex;align-items:center;justify-content:center;aspect-ratio:2/3;width:100%;object-fit:cover;background:#1b1a1f;text-align:center;padding:.6rem;font-size:.85rem;overflow-wrap:anywhere}
+.mc .b{padding:.7rem;display:flex;flex-direction:column;gap:.3rem;flex:1}
+.mc h3{margin:0;font:700 .95rem/1.25 "Libre Baskerville",serif;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mc .meta{font-size:.78rem;opacity:.9}.mc .why{font-size:.74rem;margin:0!important;padding-top:.4rem;line-height:1.4}
+.mc .acts{margin-top:auto;display:flex;gap:.4rem;flex-wrap:wrap;padding-top:.5rem}
+.mc .btn,.mb .btn{padding:.3rem .75rem;font-size:.72rem;border-radius:99px}
+.btn[aria-pressed="true"].save{background:var(--gold);color:#1b1a1f}
+.sk{aspect-ratio:2/3.2;border-radius:6px;background:linear-gradient(90deg,rgba(243,233,210,.06),rgba(243,233,210,.18),rgba(243,233,210,.06));background-size:200% 100%;animation:sh 1.2s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.empty{font-style:italic;opacity:.9}#sq{border-radius:99px}
+.links{display:flex;gap:1rem;margin-left:1.2rem}.links a{color:var(--cream);text-decoration:none;font:500 .8rem Oswald,sans-serif;letter-spacing:.1em;text-transform:uppercase}.links a:hover{color:var(--hi)}
+.menu{display:none}.movdlg{width:min(40rem,calc(100% - 2rem))}.mb{display:flex;gap:1.2rem;flex-wrap:wrap}
+.mb .dp{width:min(12rem,100%);border-radius:4px;align-self:flex-start}.mb .dt{flex:1 1 14rem}.mb h2{font-size:1.8rem;margin:0 2rem .5rem 0}.mb .meta{font-size:.85rem}
+@media (max-width:48rem){.links{display:none;order:9;flex-basis:100%;flex-direction:column;margin:0;padding:.4rem 0}.top.open .links{display:flex}.menu{display:inline-block}.links a{padding:.5rem 0}}
+@media (prefers-reduced-motion:reduce){.sk{animation:none}}
+@media (prefers-reduced-motion:reduce){.bgv{display:none}.pick{transition:none}.pick:hover{transform:none}}
 @media (prefers-reduced-motion:reduce){.title,.pick{animation:none}}
 </style>
 </head>
 <body>
-<div class="top"><button class="btn" id="theme" type="button">Switch to Noir</button></div>
+<nav class="top" id="nav" aria-label="Main"><a class="brand ext" href="./">CineMatch</a><span class="links" id="navLinks"><a href="#discover">Discover</a><a href="#search">Search</a><a href="#trending">Trending</a><a href="#watchlist">Watchlist</a><a href="#taste">Your taste</a></span><span class="sp"></span><span class="who" id="who" role="status" hidden></span><button class="btn" id="authBtn" type="button">Sign in</button><button class="btn" id="theme" type="button">Switch to Noir</button><button class="btn menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button></nav>
 <main>
 <header class="hero">
+<video class="bgv" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1" onerror="this.remove()"><source src="assets/107142-675298847.mp4" type="video/mp4"></video>
+<div class="shade" aria-hidden="true"></div>
 <p class="in">in</p>
 <h1 class="title ext">CineMatch</h1>
 <p class="sub">Tell us what you love and the mood you’re in. We’ll pick tonight’s feature.</p>
 <p class="credit">Presented by Sevanth</p>
 </header>
 
-<section class="card" aria-labelledby="ft">
+<section class="blk" id="discover" aria-labelledby="dh"><h2 class="ext" id="dh">Pick tonight’s mood</h2>
+<div class="chips" id="moods" role="group" aria-label="Mood"></div>
+<p id="moodMsg" role="status" aria-live="polite" class="hint"></p><div class="mgrid" id="moodGrid"></div></section>
+<section class="blk" id="search" aria-labelledby="sh"><h2 class="ext" id="sh">Search films</h2>
+<form id="sform" class="row" role="search"><input id="sq" type="search" placeholder="Search any film" aria-label="Search films" maxlength="100"><button class="btn" id="sBtn" type="submit">Search</button></form>
+<p id="sMsg" role="status" aria-live="polite" class="hint"></p><div class="mgrid" id="sGrid"></div></section>
+<section class="blk" id="trending" aria-labelledby="th"><h2 class="ext" id="th">Trending this week</h2><div class="mgrid" id="tGrid"></div></section>
+<section class="blk" id="watchlist" aria-labelledby="wh"><h2 class="ext" id="wh">Your watchlist</h2><div id="wlBox"></div></section>
+<section class="card" id="taste" aria-labelledby="ft">
 <h2 class="ext" id="ft">Your taste</h2>
 <fieldset>
 <legend>Favourite films</legend>
@@ -79,7 +144,7 @@ footer small{display:block;margin-top:.8rem;font-size:.78rem;opacity:.85}
 <ul class="chips" id="favChips"></ul>
 </fieldset>
 <fieldset>
-<legend>Themes you’re in the mood for</legend>
+<legend>What’s the mood tonight?</legend>
 <div class="chips" id="themes" style="margin-top:0"></div>
 </fieldset>
 <fieldset>
@@ -99,8 +164,29 @@ footer small{display:block;margin-top:.8rem;font-size:.78rem;opacity:.85}
 <footer>
 <p class="credit">Produced by Sevanth</p>
 <p class="credit">© 2026 Sevanth. All rights reserved.</p>
-<small>This build uses a sample catalogue of 40 films. Live movie data comes in the next version.</small>
+<small>“Your taste” matches against a sample catalogue of 40 films. Moods, search and trending use live data from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB.</small>
 </footer>
+<dialog class="authdlg" id="authDlg" aria-labelledby="authTitle">
+<div class="in2">
+<button class="btn x" id="authClose" type="button" aria-label="Close">&times;</button>
+<h2 class="ext" id="authTitle">Sign in</h2>
+<p id="authOff"></p>
+<div class="authbody">
+<div class="chips tabs" id="tabs" style="margin-top:0"><button type="button" class="theme" id="tabIn" aria-pressed="true">Sign in</button><button type="button" class="theme" id="tabUp" aria-pressed="false">Create account</button></div>
+<div id="gWrap"><button class="btn go" id="gBtn" type="button">Continue with Google</button><p class="or">or use your email</p></div>
+<form id="authForm" novalidate>
+<div id="emailRow"><label class="l" for="aEmail">Email</label><input id="aEmail" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false"></div>
+<div id="pwRow"><label class="l" for="aPw" id="pwLabel">Password</label><input id="aPw" type="password" autocomplete="current-password"><p class="hint" id="pwHint" hidden style="margin-top:-.6rem">Use at least 8 characters.</p></div>
+<div id="pw2Row" hidden><label class="l" for="aPw2">Confirm password</label><input id="aPw2" type="password" autocomplete="new-password"></div>
+<button class="btn go" id="aSubmit" type="submit">Sign in</button>
+</form>
+<p id="aMsg" role="status" aria-live="polite"></p>
+<p class="links"><button class="link" id="forgot" type="button">Forgot password?</button><button class="link" id="back" type="button" hidden>Back to sign in</button><button class="link" id="resend" type="button" hidden>Resend confirmation email</button></p>
+</div>
+</div>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<dialog class="authdlg movdlg" id="movDlg" aria-label="Film details"><div class="in2"><button class="btn x" id="movClose" type="button" aria-label="Close">&times;</button><div id="movBody" class="mb"></div></div></dialog>
 <datalist id="titles"></datalist>
 
 <script>
@@ -195,5 +281,9 @@ function setTheme(t){document.documentElement.dataset.theme=t;$("theme").textCon
 $("theme").onclick=function(){setTheme(document.documentElement.dataset.theme==="noir"?"technicolor":"noir")};
 try{var s=localStorage.getItem("cm-theme");if(s==="noir"||s==="technicolor")setTheme(s)}catch(e){}
 </script>
+<script src="config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="auth.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
